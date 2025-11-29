@@ -7,12 +7,14 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 import Fuse from 'fuse.js';
 
-// Get the directory of this module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Get the directory of this module - use a function to avoid duplicate declarations
+function getContentJsonPath(): string {
+  const filename = fileURLToPath(import.meta.url);
+  const dirname = path.dirname(filename);
+  return path.join(dirname, '..', 'data', 'content.json');
+}
 
-// Use the copied content.json from data folder - this gets updated during build
-const CONTENT_JSON_PATH = path.join(__dirname, '..', 'data', 'content.json');
+const CONTENT_JSON_PATH = getContentJsonPath();
 
 export interface ContentItem {
   label: string;

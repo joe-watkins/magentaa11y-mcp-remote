@@ -9,9 +9,18 @@ import Fuse from 'fuse.js';
 
 // Get the directory of this module - use a function to avoid duplicate declarations
 function getContentJsonPath(): string {
+  // In Netlify functions, try multiple possible paths
   const filename = fileURLToPath(import.meta.url);
   const dirname = path.dirname(filename);
-  return path.join(dirname, '..', 'data', 'content.json');
+  
+  // Try relative to build directory first (local development)
+  const localPath = path.join(dirname, '..', 'data', 'content.json');
+  
+  // For Netlify, the included_files are in the function's root
+  const netlifyPath = path.join(process.cwd(), 'data', 'content.json');
+  
+  // Return netlify path if in Lambda environment, otherwise local
+  return process.env.AWS_LAMBDA_FUNCTION_NAME ? netlifyPath : localPath;
 }
 
 const CONTENT_JSON_PATH = getContentJsonPath();

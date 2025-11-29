@@ -7,6 +7,10 @@ Provides accessibility acceptance criteria from [MagentaA11y](https://github.com
 
 Parses markdown into `content.json`, loads into memory with Fuse.js search indices for <5ms responses. 11 tools covering 51 web + 42 native components.
 
+## Technology Stack
+
+This MCP server uses **Netlify Edge Functions** to provide stateless HTTP transport, exposing MCP tools via JSON-RPC protocol at the `/mcp` endpoint. The `netlify/functions/api.js` handler implements the full MCP lifecycle—initialization, tool listing, and tool execution—while managing in-memory content loading and CORS. Clients connect using `mcp-remote@next`, an NPX-installable proxy that bridges the HTTP transport to MCP-compatible IDEs like VSCode, Claude Desktop, and Cursor. This architecture enables zero-config remote deployment: push to GitHub, connect to Netlify, and any MCP client can instantly access the tools via `npx mcp-remote@next https://your-site.netlify.app/mcp`.
+
 ## Available Tools
 
 **Web:** `list_web_components`, `get_web_component`, `search_web_criteria`  
@@ -23,21 +27,7 @@ npm install && npm run build
 **Remote MCP:** Deploy to Netlify for HTTP transport access
 
 ## MCP Configuration
-
 Add absolute path to `build/index.js` in your IDE config:
-
-### Cursor
-**File:** `%APPDATA%\Cursor\User\globalStorage\saoudrizwan.claude-dev\settings\cline_mcp_settings.json`
-```json
-{
-  "mcpServers": {
-    "magentaa11y": {
-      "command": "node",
-      "args": ["/ABSOLUTE/PATH/TO/magentaa11y-mcp/build/index.js"]
-    }
-  }
-}
-```
 
 ### VSCode (Local)
 **File:** `%APPDATA%\Code\User\mcp.json`
@@ -58,33 +48,6 @@ Add absolute path to `build/index.js` in your IDE config:
   "MagentaA11y MCP": {
     "command": "npx",
     "args": ["mcp-remote@next", "https://your-site.netlify.app/mcp"]
-  }
-}
-```
-Replace `your-site.netlify.app` with your actual Netlify deployment URL.
-
-### Claude Desktop (Local)
-**File:** `%APPDATA%\Claude\claude_desktop_config.json`
-```json
-{
-  "mcpServers": {
-    "magentaa11y": {
-      "command": "node",
-      "args": ["/ABSOLUTE/PATH/TO/magentaa11y-mcp/build/index.js"]
-    }
-  }
-}
-```
-
-### Claude Desktop (Remote - Netlify)
-**File:** `%APPDATA%\Claude\claude_desktop_config.json`
-```json
-{
-  "mcpServers": {
-    "magentaa11y": {
-      "command": "npx",
-      "args": ["mcp-remote@next", "https://your-site.netlify.app/mcp"]
-    }
   }
 }
 ```

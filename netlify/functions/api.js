@@ -1,5 +1,6 @@
 // Netlify function for MCP over HTTP (stateless)
 import { ContentLoader } from '../../build/content-loader.js';
+import { TOOL_DEFINITIONS } from '../../build/tool-definitions.js';
 
 const contentLoader = new ContentLoader();
 let isInitialized = false;
@@ -15,115 +16,8 @@ const initialize = async () => {
   return initPromise;
 };
 
-// Tool definitions
-const tools = [
-  {
-    name: 'list_web_components',
-    description: 'List all available web accessibility components',
-    inputSchema: { type: 'object', properties: { category: { type: 'string' } } },
-  },
-  {
-    name: 'get_web_component',
-    description: 'Get detailed accessibility criteria for a web component',
-    inputSchema: {
-      type: 'object',
-      properties: { component: { type: 'string' } },
-      required: ['component'],
-    },
-  },
-  {
-    name: 'search_web_criteria',
-    description: 'Search web accessibility criteria',
-    inputSchema: {
-      type: 'object',
-      properties: { query: { type: 'string' }, max_results: { type: 'number', default: 10 } },
-      required: ['query'],
-    },
-  },
-  {
-    name: 'list_native_components',
-    description: 'List all available native accessibility components',
-    inputSchema: { type: 'object', properties: { category: { type: 'string' } } },
-  },
-  {
-    name: 'get_native_component',
-    description: 'Get detailed accessibility criteria for a native component',
-    inputSchema: {
-      type: 'object',
-      properties: { component: { type: 'string' } },
-      required: ['component'],
-    },
-  },
-  {
-    name: 'search_native_criteria',
-    description: 'Search native accessibility criteria',
-    inputSchema: {
-      type: 'object',
-      properties: { query: { type: 'string' }, max_results: { type: 'number', default: 10 } },
-      required: ['query'],
-    },
-  },
-  {
-    name: 'get_component_gherkin',
-    description: 'Get Gherkin-style acceptance criteria',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        platform: { type: 'string', enum: ['web', 'native'] },
-        component: { type: 'string' },
-      },
-      required: ['platform', 'component'],
-    },
-  },
-  {
-    name: 'get_component_condensed',
-    description: 'Get condensed acceptance criteria',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        platform: { type: 'string', enum: ['web', 'native'] },
-        component: { type: 'string' },
-      },
-      required: ['platform', 'component'],
-    },
-  },
-  {
-    name: 'get_component_developer_notes',
-    description: 'Get developer implementation notes',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        platform: { type: 'string', enum: ['web', 'native'] },
-        component: { type: 'string' },
-      },
-      required: ['platform', 'component'],
-    },
-  },
-  {
-    name: 'get_component_native_notes',
-    description: 'Get platform-specific developer notes',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        platform: { type: 'string', enum: ['ios', 'android'] },
-        component: { type: 'string' },
-      },
-      required: ['platform', 'component'],
-    },
-  },
-  {
-    name: 'list_component_formats',
-    description: 'List available content formats for a component',
-    inputSchema: {
-      type: 'object',
-      properties: {
-        platform: { type: 'string', enum: ['web', 'native'] },
-        component: { type: 'string' },
-      },
-      required: ['platform', 'component'],
-    },
-  },
-];
+// Use shared tool definitions
+const tools = TOOL_DEFINITIONS;
 
 // Tool handler
 async function handleToolCall(name, args) {

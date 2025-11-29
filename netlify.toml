@@ -14,9 +14,14 @@
     "@modelcontextprotocol/sdk"
   ]
 
-# Route all requests to the MCP function
+# Route MCP endpoint to the function
 [[redirects]]
-  from = "/*"
+  from = "/mcp"
+  to = "/.netlify/functions/api"
+  status = 200
+
+# Handle SSE endpoint for mcp-remote
+[[redirects]]
+  from = "/mcp/*"
   to = "/.netlify/functions/api/:splat"
   status = 200
-  force = true

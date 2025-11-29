@@ -1,4 +1,4 @@
-# Netlify configuration for MCP Server over SSE
+# Netlify configuration for MCP Server over HTTP
 [build]
   command = "npm install && npm run build"
   publish = "."
@@ -10,10 +10,7 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
   external_node_modules = [
-    "express",
-    "cors", 
     "fuse.js",
-    "serverless-http",
     "@modelcontextprotocol/sdk"
   ]
 

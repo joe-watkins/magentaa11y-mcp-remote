@@ -1,8 +1,9 @@
-# MagentaA11y MCP Server + REST API
+# MagentaA11y MCP Server
 
-Provides accessibility acceptance criteria from [MagentaA11y](https://github.com/tmobile/magentaA11y) via:
-1. **MCP Server** (stdio) for Claude Desktop, Cursor, VSCode
-2. **REST API** (HTTP) for web apps, LLMs - deployed to Netlify as serverless functions
+Provides accessibility acceptance criteria from [MagentaA11y](https://github.com/tmobile/magentaA11y) via MCP protocol.
+
+**Local:** stdio transport for Claude Desktop, Cursor, VSCode  
+**Remote:** HTTP transport deployed to Netlify serverless functions
 
 Parses markdown into `content.json`, loads into memory with Fuse.js search indices for <5ms responses. 11 tools covering 51 web + 42 native components.
 
@@ -18,8 +19,8 @@ Parses markdown into `content.json`, loads into memory with Fuse.js search indic
 npm install && npm run build
 ```
 
-- **MCP Server**: Configure IDE paths below
-- **REST API**: Deploy to Netlify or run `npm run start:api` locally
+**Local MCP:** Configure IDE with stdio transport (see below)  
+**Remote MCP:** Deploy to Netlify for HTTP transport access
 
 ## MCP Configuration
 
@@ -55,8 +56,8 @@ Add absolute path to `build/index.js` in your IDE config:
 ```json
 {
   "MagentaA11y MCP": {
-    "type": "sse",
-    "url": "https://your-site.netlify.app"
+    "command": "npx",
+    "args": ["mcp-remote@next", "https://your-site.netlify.app/mcp"]
   }
 }
 ```
@@ -81,24 +82,30 @@ Replace `your-site.netlify.app` with your actual Netlify deployment URL.
 {
   "mcpServers": {
     "magentaa11y": {
-      "url": "https://your-site.netlify.app"
+      "command": "npx",
+      "args": ["mcp-remote@next", "https://your-site.netlify.app/mcp"]
     }
   }
 }
 ```
+Replace `your-site.netlify.app` with your actual Netlify deployment URL.
 
 **Restart IDE after configuration.**
 
 ## Commands
 
-`npm run build` - Full build | `npm run sync` - Update content | `npm start` - Test MCP (stdio) | `npm run start:http` - Run HTTP/SSE server locally
+`npm run build` - Full build  
+`npm run sync` - Update content  
+`npm start` - Test MCP (stdio)
 
 ## Deployment
 
-Push to GitHub and connect to Netlify. The `netlify.toml` and `netlify/functions/api.js` will automatically set up the MCP server over SSE.
+Push to GitHub and connect to Netlify. The `netlify.toml` and `netlify/functions/api.js` are configured for stateless HTTP transport at `/mcp` endpoint.
+
+**Note:** Remote MCP clients use `mcp-remote@next` proxy for maximum compatibility with the HTTP transport.
 
 ## Resources
 
 [MagentaA11y](https://www.magentaa11y.com/) • [MCP](https://modelcontextprotocol.io/) • [WCAG](https://www.w3.org/WAI/WCAG21/quickref/)
 
-**License:** Apache-2.0
+**License:** MIT

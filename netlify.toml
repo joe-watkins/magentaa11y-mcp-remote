@@ -1,16 +1,25 @@
-# Netlify configuration for Node.js Express API
+# Netlify configuration for MCP Server over SSE
 [build]
   command = "npm install && npm run build"
+  publish = "."
 
 [build.environment]
   NODE_VERSION = "18"
 
 [functions]
+  directory = "netlify/functions"
   node_bundler = "esbuild"
-  external_node_modules = ["express", "cors", "fuse.js", "serverless-http"]
+  external_node_modules = [
+    "express",
+    "cors", 
+    "fuse.js",
+    "serverless-http",
+    "@modelcontextprotocol/sdk"
+  ]
 
-# Redirect all requests to the serverless function
+# Route all requests to the MCP function
 [[redirects]]
   from = "/*"
   to = "/.netlify/functions/api/:splat"
   status = 200
+  force = true

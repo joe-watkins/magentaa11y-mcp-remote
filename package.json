@@ -15,9 +15,7 @@
     "watch": "tsc --watch",
     "dev": "tsc --watch",
     "start": "node build/index.js",
-    "start:http": "node build/http-server.js",
-    "start:api": "node build/express-server.js",
-    "dev:api": "tsc && node build/express-server.js"
+    "start:http": "node build/http-server.js"
   },
   "keywords": [
     "mcp",

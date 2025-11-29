@@ -9,10 +9,8 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
-  external_node_modules = [
-    "fuse.js",
-    "@modelcontextprotocol/sdk"
-  ]
+  external_node_modules = ["fuse.js"]
+  included_files = ["data/content.json", "build/**/*.js"]
 
 # Route MCP endpoint to the function
 [[redirects]]
